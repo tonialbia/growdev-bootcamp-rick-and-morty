@@ -23,7 +23,7 @@ async function listCharactersByPage(page = 1) {
         return {
             nextPage: result.data.info.next,
             prevPage: result.data.info.prev,
-            characterList: result.data.results,
+            charactersList: result.data.results,
         };
     } catch (error) {
         console.log(error);
