@@ -17,10 +17,10 @@
 
 <body>
     
-    <header>
-        <nav class="navbar bg-white">
+    <header class="container-fluid mb-5">
+        <nav class="navbar bg-body-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" href="/index.html">
                     <img src="../assets/images/RICK_MORTY_ICON-01.svg" width="40" height="40" alt="Ícone Rick and Morty">
                 </a>
             </div>
@@ -28,7 +28,7 @@
         <section class="container py-5">
             <div class="row justify-content-center g-5">
                 <div class="col-12 text-center">
-                    <h1 class="display-1 fw-bolder main__title">API Rick and Morty</h1>
+                    <h1 class="display-1 fw-bolder main__title">API de Rick and Morty</h1>
                 </div>
                 <div class="col-12 col-md-10 col-xl-8">
                     <div class="input-group mb-3">
@@ -42,15 +42,40 @@
         </section>
     </header>
 
-    <main>
+    <main class="container-fluid main-content">
         <section class="container">
             <div class="row" id="characters-list">                
-                <!-- LISTA DE PERSONAGENS PELO JS -->
+                <!-- Lista de personagens contruída pelo JS -->
             </div>
         </section>
+        
+        <nav aria-label="Page navigation example" id="pagination">
+            <!-- A paginação é construída pelo JS -->
+        </nav>
     </main>
 
-    <footer></footer>
+    <footer class="container-fluid pt-5">
+        <section class="container text-center w-50">
+            <div class="row text-uppercase fs-5 fw-bold">
+                <div class="col-12 col-md-4">
+                    <p>Personagens: <span class="text-light" id="total-characters"></span></p>
+                </div>
+                <div class="col-12 col-md-4">
+                    <p>Localizações: <span class="text-light" id="total-locations"></span></p>
+                </div>
+                <div class="col-12 col-md-4">
+                    <p>Episódios: <span class="text-light" id="total-episodes"></span></p>
+                </div>
+            </div>
+            <div class="row fw-bold copy">
+                <div class="col-12">
+                    <p>
+                        <small>Desenvolvido por <span class="text-light" id="dev-name"></span> em <span class="text-light" id="current-year"></span>.</small>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </footer>
 
 
 

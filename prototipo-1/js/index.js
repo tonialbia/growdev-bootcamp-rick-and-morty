@@ -1,18 +1,38 @@
 document.addEventListener('DOMContentLoaded', main);
 
 async function main() {
-    const result = await listCharactersByPage();
-
-    renderCharacterList(result.characterList);
+    loadMainContent();
+    renderFooterData();
 }
 
-function renderCharacterList(characters) {
+async function loadMainContent(page) {
+    const result = await listCharactersByPage(page);
+
+    const characters = [...result.charactersList];
+
+    for (const character of characters) {
+        const lastEpisodeUrl = character.episode[character.episode.length - 1];
+        
+        const episodeName = await getEpisodeDataFromUrl(lastEpisodeUrl);
+        
+        character.episode = {
+            url: lastEpisodeUrl,
+            name: episodeName,
+        };
+    }
+
+    renderCharactersList(characters);
+    renderPagination(result.prevPage, result.nextPage);
+}
+
+
+function renderCharactersList(characters) {
     const row = document.getElementById("characters-list");
     row.innerHTML = "";
 
     for (const character of characters) {
         const card = `
-        <div class="card mb-3">
+        <div class="card mb-3 card-character">
             <div class="row g-0">
                 <div class="col-12 col-md-5">
                     <div class="object-fit-fill border rounded h-100">
@@ -29,14 +49,14 @@ function renderCharacterList(characters) {
                             </small>
                         </p>
                         <p class="card-text">
-                            <small class="text-body-secondary">Última localização conhecida:</small>
+                            <small class="text-secondary">Última localização conhecida:</small>
                             <br>
-                            <small>Planeta X</small>
+                            <small>${character.location.name}</small>
                         </p>
                         <p class="card-text">
-                            <small class="text-body-secondary">Visto pela última vez em:</small>
+                            <small class="text-secondary">Visto pela última vez em:</small>
                             <br>
-                            <small>Nome do episódio</small>
+                            <small>${character.episode.name}</small>
                         </p>
                     </div>
                 </div>
@@ -50,6 +70,76 @@ function renderCharacterList(characters) {
         col.innerHTML = card;
         row.appendChild(col);
     }
+}
+
+async function renderFooterData() {
+    const totalCharacters = await getTotalByFeature("character");
+    const totalLocations = await getTotalByFeature("location");
+    const totalEpisodes = await getTotalByFeature("episode");
+
+
+    const spanTotalCharacters = document.getElementById("total-characters");
+    spanTotalCharacters.innerText = totalCharacters;
+
+    const spanTotalLocations = document.getElementById("total-locations");
+    spanTotalLocations.innerText = totalLocations;
+
+    const spanTotalEpisodes = document.getElementById("total-episodes");
+    spanTotalEpisodes.innerText = totalEpisodes;
+
+    const spanDevName = document.getElementById("dev-name");
+    spanDevName.innerText = "Silvia Tonial";
+
+    const spanCurrentYear = document.getElementById("current-year");
+    spanCurrentYear.innerText = new Date().getFullYear();
+}
+
+function renderPagination(prevPage, nextPage) {
+    const prevPageNumber = !prevPage ? 0 : prevPage.split("?page=")[1];
+    const nextPageNumber = !nextPage ? 0 : nextPage.split("?page=")[1];
+
+    const nav = document.getElementById("pagination");
+    nav.innerHTML = "";
+    const ul = document.createElement("ul");
+    ul.classList.add("pagination", "justify-content-center");
+
+    // Button Previous Page
+    const liPrevPage = document.createElement("li");
+    liPrevPage.classList.add("page-item");
+
+    if (!prevPage) {
+        liPrevPage.classList.add("disabled");
+    }
+
+    const buttonPrevPage = document.createElement("button");
+    buttonPrevPage.setAttribute("type", "button");
+    buttonPrevPage.classList.add("page-link");
+    buttonPrevPage.innerText = "Anterior";
+    buttonPrevPage.addEventListener("click", () => loadMainContent(prevPageNumber));
+
+    liPrevPage.appendChild(buttonPrevPage);
+
+    // Button Next Page
+    const liNextPage = document.createElement("li");
+    liNextPage.classList.add("page-item");
+
+    if (!nextPage) {
+        liNextPage.classList.add("disabled");
+    }
+
+    const buttonNextPage = document.createElement("button");
+    buttonNextPage.setAttribute("type", "button");
+    buttonNextPage.classList.add("page-link");
+    buttonNextPage.innerText = "Próximo";
+    buttonNextPage.addEventListener("click", () => loadMainContent(nextPageNumber));
+
+
+    liNextPage.appendChild(buttonNextPage);
+
+    ul.appendChild(liPrevPage);
+    ul.appendChild(liNextPage);
+
+    document.getElementById("pagination").appendChild(ul);
 }
 
 function mapStatus(characterStatus) {
