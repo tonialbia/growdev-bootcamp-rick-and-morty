@@ -1,9 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .main__title {
     color: #105718;
+    animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
 
 .card-title {
-    font-size: 2rem;
+    font-size: 24px;
+    font-weight: bolder;
+    margin-bottom: 2px;
 }
 
 #circle-status {
@@ -31,10 +40,23 @@ footer {
     padding-top: 40px;
 }
 
+.detail {
+    background-size: cover;
+}
+
 .card-character {
     background-color: #354338;
     color: #fff;
     cursor: pointer;
+}
+
+.card-character:hover {
+    animation: shadow-drop-center 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.card-character-detail {
+    background-color: #354338;
+    color: #fff;
 }
 
 /* Sobrescrita Bootstrap */
@@ -51,4 +73,22 @@ footer {
 .input-group-text {
     background-color: transparent;
     color: #62ab60;
+}
+
+@keyframes scale-up-center {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shadow-drop-center {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 20px 0px rgba(255, 255, 255, 0.35);
+  }
 }

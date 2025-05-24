@@ -40,3 +40,14 @@ async function getEpisodeDataFromUrl(url) {
         console.log(error);
     }
 }
+
+//Buscar dados de um personagem de acordo com o ID fornecido
+async function getCharacterById(characterId) {
+    try {
+        const result = await api.get(`/character/${characterId}`);
+
+        return result.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

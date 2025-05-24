@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', main);
 
 async function main() {
-    loadMainContent();
+    loadMainContent(1);
     renderFooterData();
 }
 
@@ -27,12 +27,19 @@ async function loadMainContent(page) {
 
 
 function renderCharactersList(characters) {
+    
     const row = document.getElementById("characters-list");
     row.innerHTML = "";
-
+    
     for (const character of characters) {
+        let nameCharacter = character.name;
+    
+        if (nameCharacter.length > 18) {
+            nameCharacter = nameCharacter.slice(0, 18).concat("...");
+        }
+
         const card = `
-        <div class="card mb-3 card-character">
+        <div class="card mb-3 card-character" onclick="viewCharacterDetails(${character.id})">
             <div class="row g-0">
                 <div class="col-12 col-md-5">
                     <div class="object-fit-fill border rounded h-100">
@@ -41,7 +48,7 @@ function renderCharactersList(characters) {
                 </div>
                 <div class="col-12 col-md-7">
                     <div class="card-body fw-bolder">
-                        <h5 class="card-title">${character.name}</h5>
+                        <h5 class="card-title">${nameCharacter}</h5>
                         <p class="card-text">
                             <small>
                                 <i id="circle-status" class="bi bi-circle-fill text-${mapStatus(character.status).color}"></i>
@@ -70,28 +77,6 @@ function renderCharactersList(characters) {
         col.innerHTML = card;
         row.appendChild(col);
     }
-}
-
-async function renderFooterData() {
-    const totalCharacters = await getTotalByFeature("character");
-    const totalLocations = await getTotalByFeature("location");
-    const totalEpisodes = await getTotalByFeature("episode");
-
-
-    const spanTotalCharacters = document.getElementById("total-characters");
-    spanTotalCharacters.innerText = totalCharacters;
-
-    const spanTotalLocations = document.getElementById("total-locations");
-    spanTotalLocations.innerText = totalLocations;
-
-    const spanTotalEpisodes = document.getElementById("total-episodes");
-    spanTotalEpisodes.innerText = totalEpisodes;
-
-    const spanDevName = document.getElementById("dev-name");
-    spanDevName.innerText = "Silvia Tonial";
-
-    const spanCurrentYear = document.getElementById("current-year");
-    spanCurrentYear.innerText = new Date().getFullYear();
 }
 
 function renderPagination(prevPage, nextPage) {
@@ -142,49 +127,6 @@ function renderPagination(prevPage, nextPage) {
     document.getElementById("pagination").appendChild(ul);
 }
 
-function mapStatus(characterStatus) {
-    switch (characterStatus) {
-        case "Alive":
-            return {
-                color: "success",
-                text: "Vivo",
-            };
-        case "Dead":
-            return {
-                color: "danger",
-                text: "Morto",
-            };
-        default:
-            return {
-                color: "secondary",
-                text: "Desconhecido",
-            };
-    }
-}
-
-function mapSpecies(characterSpecies) {
-    switch (characterSpecies) {
-        case "Human":
-            return "Humano";
-        case "Alien":
-            return "Alienígena";
-        case "Robot":
-            return "Robô";
-        case "Humanoid":
-            return "Humanoide";
-        case "unknown":
-            return "Desconhecido";
-        case "Poopybutthole":
-            return "Bunda Cagada";
-        case "Mythological Creature":
-            return "Criatura Mitológica";
-        case "Animal":
-            return "Animal";
-        case "Cronenberg":
-            return "Cronenberg";
-        case "Disease":
-            return "Doença";
-        default:
-            return `Outro (${characterSpecies})`;
-    }
+function viewCharacterDetails(characterId) {
+    window.location.href = `detail.html?character=${characterId}`;
 }
